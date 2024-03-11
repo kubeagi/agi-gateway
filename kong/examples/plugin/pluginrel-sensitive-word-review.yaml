@@ -1,0 +1,18 @@
+apiVersion: gw.t7d.io/v1
+kind: PluginRel
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: kong
+    tamp/pluginDisplayName: sensitive-word-review-default
+  labels:
+    tamp/env: kong
+    tamp/snapshot: snapshotapi-n85v0p1p
+    tamp/plugin: sensitive-word-review
+    tamp/pluginname: sensitive-word-review-default
+    tamp/pluginshow: "true"
+  name: pluginrel-e0qnvjrw
+  namespace: demo
+spec:
+  apiName: snapshotapi-n85v0p1p
+  env: kong
+  pluginName: sensitive-word-review-default

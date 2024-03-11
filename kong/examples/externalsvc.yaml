@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    configuration.konghq.com: kong-aiservicedemo # 规则为 kong-{apigroup name}
+    ingress.kubernetes.io/service-upstream: "true" # Fixed as true
+    konghq.com/override: kong-aiservicedemo # 规则为 kong-{apigroup name}
+    kubernetes.io/ingress.class: kong # kongingress name
+  labels:
+    kong: targettype-domain # Fixed as targettype-domain
+    system/tamp: "1"  # Fixed as “1”
+    tamp/system: "true"  # Fixed as “true”
+  name: kong-service-cfpoztbq0z # svcname
+  namespace: demo # svc namespace
+spec:
+  externalName: open.bigmodel.cn # Domain name for external services
+  ports:
+    - port: 443
+      protocol: TCP
+      targetPort: 443
+  sessionAffinity: None
+  type: ExternalName

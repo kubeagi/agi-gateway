@@ -1,0 +1,84 @@
+apiVersion: charts.konghq.com/v1alpha1
+clusterId: {{ .Values.clusterId }}
+displayName: globalmarket
+kind: Kong
+metadata:
+  annotations:
+    log: {{ .Values.logUrl }}
+    tamp/clusterId: {{ .Values.clusterId }}
+    tamp/desc: globalmarket
+    tamp/displayName: globalmarket
+    tamp/harborUrl: {{ .Values.image.registry }}
+    tamp/ingressClass: {{ .Values.ingressClass }}
+    tamp/lblocation: {{ .Values.lblocation }}
+    tamp/openTapm: "{{ .Values.openTapm }}"
+    tamp/tenantId: {{ .Values.tenantId }}
+    tamp/traceUrl: {{ .Values.traceUrl }}
+  labels:
+    tamp/system: "{{ .Values.labels.tampSystem }}"
+  name: {{ .Values.name }}
+  namespace: {{ .Release.Namespace }}
+name: {{ .Values.name }}
+namespace: {{ .Release.Namespace }}
+spec:
+  admin:
+    enabled: true
+    labels:
+      enable-metrics: true
+  affinity:
+    {{- toYaml .Values.affinity | nindent 4 }}
+  env:
+    database: postgres
+    pg_database: kong
+    pg_host: postgresql-cluster.{{ .Release.Namespace }}.svc.cluster.local
+    pg_password: root
+    pg_port: "5432"
+    pg_ssl: true
+    pg_ssl_verify: false
+    pg_timeout: 5000
+    pg_user: root
+  global:
+    applicationName: kong
+  image:
+    pullPolicy: IfNotPresent
+    registry: {{ .Values.image.registry }}
+    repository: "{{ .Values.image.registry }}/{{ .Values.image.kongproxy.repository }}"
+    tag: {{ .Values.image.kongproxy.tag }}
+  ingressController:
+    enabled: true
+    image:
+      repository: "{{ .Values.image.registry }}/{{ .Values.image.ingressController.repository }}"
+      tag: v2.5.0
+    ingressClass: {{ .Values.ingressClass }}
+    installCRDs: false
+  migrations:
+    preUpgrade: true
+  podAnnotations:
+    prometheus.io/path: /metrics
+    prometheus.io/port: "9542"
+    prometheus.io/scrape: "true"
+  proxy:
+    metadata:
+      annotations:
+        log: {{ .Values.logUrl }}
+        tamp/clusterId: {{ .Values.clusterId }}
+        tamp/desc: globalmarket
+        tamp/displayName: globalmarket
+        tamp/harborUrl: {{ .Values.image.registry }}
+        tamp/ingressClass: {{ .Values.ingressClass }}
+        tamp/lblocation: {{ .Values.lblocation }}
+        tamp/openTapm: "{{ .Values.openTapm }}"
+        tamp/tenantId: {{ .Values.tenantId }}
+        tamp/traceUrl: {{ .Values.traceUrl }}
+      labels:
+        tamp/system: "{{ .Values.labels.tampSystem }}"
+      name: {{ .Values.name }}
+      namespace: {{ .Release.Namespace }}
+    replica: 1
+  resources:
+    limits:
+      cpu: 8000m
+      memory: 4096Mi
+    requests:
+      cpu: 100m
+      memory: 200Mi

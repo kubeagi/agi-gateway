@@ -1,0 +1,11 @@
+apiVersion: configuration.konghq.com/v1
+config:
+  supplier: openai # This value is the key value of the service in the configmap of the AI service
+disabled: false
+kind: KongPlugin
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: kong # ingress name
+  name: ai-token-snapshotapi-adgv5k4r-s  # name
+  namespace: demo  # namespace
+plugin: ai-token  # The plugin type is ai-token

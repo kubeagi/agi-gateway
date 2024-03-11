@@ -1,0 +1,1091 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: apigroups.gw.t7d.io
+spec:
+  conversion:
+    strategy: None
+  group: gw.t7d.io
+  names:
+    kind: ApiGroup
+    listKind: ApiGroupList
+    plural: apigroups
+    shortNames:
+      - ag
+    singular: apigroup
+  scope: Namespaced
+  versions:
+    - additionalPrinterColumns:
+        - jsonPath: .spec.proxyType
+          name: proxytype
+          type: string
+        - description: Age
+          jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1
+      schema:
+        openAPIV3Schema:
+          description: ApiGroup is a specification for a ApiGroup resource
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              properties:
+                apiType:
+                  type: string
+                domain:
+                  items:
+                    properties:
+                      content:
+                        type: string
+                      name:
+                        type: string
+                      secret:
+                        type: string
+                      value:
+                        type: string
+                    type: object
+                  type: array
+                dubboInterface:
+                  type: string
+                healthCheck:
+                  type: boolean
+                jar:
+                  type: string
+                lb:
+                  properties:
+                    gray:
+                      type: boolean
+                    lbParam:
+                      items:
+                        properties:
+                          matchKey:
+                            type: string
+                          matchType:
+                            type: string
+                          name:
+                            type: string
+                          rangeInfo:
+                            type: string
+                          ruleType:
+                            type: string
+                          weight:
+                            type: integer
+                        type: object
+                      type: array
+                  type: object
+                path:
+                  type: string
+                protocol:
+                  type: string
+                proxyType:
+                  type: string
+                retries:
+                  type: integer
+                loadBalance:
+                  properties:
+                    balancingAlgorithms:
+                      type: string
+                    consistentHashingType:
+                      type: string
+                    consistentHashingValue:
+                      type: string
+                  type: object
+                target:
+                  items:
+                    properties:
+                      host:
+                        type: string
+                      name:
+                        type: string
+                      originHost:
+                        type: string
+                      originPort:
+                        type: integer
+                      port:
+                        type: integer
+                      primary:
+                        type: integer
+                      proxyNumber:
+                        type: integer
+                      registrationCenter:
+                        type: string
+                      registrationCenterDisplayName:
+                        type: string
+                      type:
+                        type: string
+                    type: object
+                  type: array
+                timeout:
+                  type: integer
+                upstream:
+                  properties:
+                    hashFallback:
+                      type: string
+                    hashOn:
+                      type: string
+                    healthChecks:
+                      properties:
+                        active:
+                          properties:
+                            concurrency:
+                              minimum: 1
+                              type: integer
+                            healthy:
+                              properties:
+                                httpStatues:
+                                  items:
+                                    type: integer
+                                  type: array
+                                interval:
+                                  minimum: 0
+                                  type: integer
+                                successes:
+                                  minimum: 0
+                                  type: integer
+                              type: object
+                            httpPath:
+                              pattern: ^/.*$
+                              type: string
+                            httpsSni:
+                              type: string
+                            httpsVerifyCertificate:
+                              type: boolean
+                            timeout:
+                              minimum: 0
+                              type: integer
+                            type:
+                              type: string
+                            unhealthy:
+                              properties:
+                                httpFailures:
+                                  minimum: 0
+                                  type: integer
+                                httpStatues:
+                                  items:
+                                    type: integer
+                                  type: array
+                                interval:
+                                  minimum: 0
+                                  type: integer
+                                tcpFailures:
+                                  minimum: 0
+                                  type: integer
+                                timeout:
+                                  minimum: 0
+                                  type: integer
+                              type: object
+                          type: object
+                      type: object
+                  type: object
+              required:
+                - protocol
+                - proxyType
+                - target
+              type: object
+            status:
+              properties:
+                env:
+                  items:
+                    properties:
+                      groupIngress:
+                        type: string
+                      name:
+                        type: string
+                    type: object
+                  type: array
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+          required:
+            - metadata
+            - spec
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: authorizes.gw.t7d.io
+spec:
+  conversion:
+    strategy: None
+  group: gw.t7d.io
+  names:
+    kind: Authorize
+    listKind: AuthorizeList
+    plural: authorizes
+    singular: authorize
+  scope: Namespaced
+  versions:
+    - additionalPrinterColumns:
+        - description: conname
+          jsonPath: .spec.conName
+          name: conname
+          type: string
+        - description: env
+          jsonPath: .spec.env
+          name: env
+          type: string
+        - description: apiName
+          jsonPath: .spec.apiName
+          name: apiName
+          type: string
+        - description: bindingStatus
+          jsonPath: .spec.bindingStatus
+          name: bindingStatus
+          type: string
+        - description: Age
+          jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1
+      schema:
+        openAPIV3Schema:
+          description: Authorization is a specification for a Authorization resource
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              properties:
+                apiName:
+                  type: string
+                conName:
+                  type: string
+                env:
+                  type: string
+                bindingStatus:
+                  type: string
+                bindingType:
+                  type: string
+              type: object
+            status:
+              properties:
+                kacl:
+                  type: string
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: consumers.gw.t7d.io
+spec:
+  conversion:
+    strategy: None
+  group: gw.t7d.io
+  names:
+    kind: Consumer
+    listKind: ConsumerList
+    plural: consumers
+    singular: consumer
+  scope: Namespaced
+  versions:
+    - additionalPrinterColumns:
+        - description: conname
+          jsonPath: .spec.conName
+          name: conname
+          type: string
+        - description: Age
+          jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1
+      schema:
+        openAPIV3Schema:
+          description: SnapshotApi is a specification for a SnapshotApi resource
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              properties:
+                conName:
+                  type: string
+                description:
+                  type: string
+              type: object
+            status:
+              properties:
+                publishInfo:
+                  items:
+                    properties:
+                      env:
+                        type: string
+                      kcName:
+                        type: string
+                    type: object
+                  type: array
+                  x-kubernetes-preserve-unknown-fields: true
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: credentials.gw.t7d.io
+spec:
+  conversion:
+    strategy: None
+  group: gw.t7d.io
+  names:
+    kind: Credential
+    listKind: CredentialList
+    plural: credentials
+    singular: credential
+  scope: Namespaced
+  versions:
+    - additionalPrinterColumns:
+        - description: Age
+          jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+        - description: Configuration of the plugin
+          jsonPath: .type
+          name: Type
+          priority: 1
+          type: string
+      name: v1
+      schema:
+        openAPIV3Schema:
+          description: SnapshotApi is a specification for a SnapshotApi resource
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            config:
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+            kind:
+              description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            status:
+              properties:
+                publishInfo:
+                  items:
+                    properties:
+                      env:
+                        type: string
+                      kcdName:
+                        type: string
+                    type: object
+                  type: array
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+            type:
+              type: string
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: orders.gw.t7d.io
+spec:
+  conversion:
+    strategy: None
+  group: gw.t7d.io
+  names:
+    kind: Order
+    listKind: OrderList
+    plural: orders
+    singular: order
+  scope: Namespaced
+  versions:
+    - additionalPrinterColumns:
+        - description: conname
+          jsonPath: .spec.conName
+          name: conname
+          type: string
+        - description: Age
+          jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1
+      schema:
+        openAPIV3Schema:
+          description: Authorization is a specification for a Authorization resource
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              properties:
+                apiName:
+                  type: string
+                conName:
+                  type: string
+                env:
+                  type: string
+                userName:
+                  type: string
+              type: object
+            status:
+              properties:
+                approvalTime:
+                  type: string
+                approvalUser:
+                  type: string
+                approve:
+                  type: integer
+                orderType:
+                  type: integer
+                remark:
+                  type: string
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: pluginrels.gw.t7d.io
+spec:
+  conversion:
+    strategy: None
+  group: gw.t7d.io
+  names:
+    kind: PluginRel
+    listKind: PluginRelList
+    plural: pluginrels
+    shortNames:
+      - pr
+    singular: pluginrel
+  scope: Namespaced
+  versions:
+    - additionalPrinterColumns:
+        - description: Age
+          jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1
+      schema:
+        openAPIV3Schema:
+          description: SnapshotApi is a specification for a SnapshotApi resource
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              properties:
+                apiName:
+                  type: string
+                env:
+                  type: string
+                pluginName:
+                  type: string
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: plugins.gw.t7d.io
+spec:
+  conversion:
+    strategy: None
+  group: gw.t7d.io
+  names:
+    kind: Plugin
+    listKind: PluginList
+    plural: plugins
+    singular: plugin
+  scope: Namespaced
+  versions:
+    - additionalPrinterColumns:
+        - description: Age
+          jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+        - description: Indicates if the plugin is disabled
+          jsonPath: .disabled
+          name: Disabled
+          priority: 1
+          type: boolean
+        - description: Configuration of the plugin
+          jsonPath: .config
+          name: Config
+          priority: 1
+          type: string
+      name: v1
+      schema:
+        openAPIV3Schema:
+          description: SnapshotApi is a specification for a SnapshotApi resource
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            config:
+              description: Config contains the plugin configuration.
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+            disabled:
+              type: boolean
+            kind:
+              description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            plugin:
+              type: string
+            status:
+              properties:
+                publishInfo:
+                  items:
+                    properties:
+                      env:
+                        type: string
+                      kgName:
+                        type: string
+                    type: object
+                  type: array
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: publishapis.gw.t7d.io
+spec:
+  conversion:
+    strategy: None
+  group: gw.t7d.io
+  names:
+    kind: PublishApi
+    listKind: PublishApiList
+    plural: publishapis
+    shortNames:
+      - papi
+    singular: publishapi
+  scope: Namespaced
+  versions:
+    - additionalPrinterColumns:
+        - jsonPath: .spec.path
+          name: path
+          type: string
+        - jsonPath: .spec.pattern
+          name: pattern
+          type: string
+        - jsonPath: .spec.method
+          name: method
+          type: string
+        - jsonPath: .spec.protocol
+          name: protocol
+          type: string
+        - description: Age
+          jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1
+      schema:
+        openAPIV3Schema:
+          description: SnapshotApi is a specification for a SnapshotApi resource
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              properties:
+                apiDoc:
+                  type: string
+                dubbo:
+                  properties:
+                    interfaceName:
+                      type: string
+                    methodName:
+                      type: string
+                  type: object
+                method:
+                  items:
+                    type: string
+                  type: array
+                path:
+                  type: string
+                pattern:
+                  type: string
+                protocol:
+                  items:
+                    type: string
+                  type: array
+                stripPath:
+                  type: boolean
+                grpcService:
+                  type: string
+                grpcMethod:
+                  type: string
+                grpcContent:
+                  type: string
+                matchingRules:
+                  type: string
+                tranformerInfo:
+                  properties:
+                    backendHttpMethod:
+                      type: string
+                    backendParamDto:
+                      items:
+                        properties:
+                          backendKey:
+                            type: string
+                          backendPosition:
+                            type: string
+                          backendValue:
+                            type: string
+                          defaultValue:
+                            type: string
+                          describe:
+                            type: string
+                          isRequired:
+                            type: boolean
+                          requestDataType:
+                            type: string
+                          requestKey:
+                            type: string
+                          requestPosition:
+                            type: string
+                        type: object
+                      type: array
+                    backendUri:
+                      type: string
+                    constantParamDto:
+                      items:
+                        properties:
+                          backendKey:
+                            type: string
+                          backendPosition:
+                            type: string
+                          backendValue:
+                            type: string
+                          defaultValue:
+                            type: string
+                          describe:
+                            type: string
+                          isRequired:
+                            type: boolean
+                          requestDataType:
+                            type: string
+                          requestKey:
+                            type: string
+                          requestPosition:
+                            type: string
+                        type: object
+                      type: array
+                    failedRespInfo:
+                      type: string
+                    filterType:
+                      type: integer
+                    requestContentType:
+                      type: string
+                    requestParamDto:
+                      items:
+                        properties:
+                          backendKey:
+                            type: string
+                          backendPosition:
+                            type: string
+                          backendValue:
+                            type: string
+                          defaultValue:
+                            type: string
+                          describe:
+                            type: string
+                          isRequired:
+                            type: boolean
+                          requestDataType:
+                            type: string
+                          requestKey:
+                            type: string
+                          requestPosition:
+                            type: string
+                        type: object
+                      type: array
+                    successRespInfo:
+                      type: string
+                  type: object
+              type: object
+            status:
+              properties:
+                offlineTime:
+                  type: string
+                onlineTime:
+                  type: string
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: snapshotapis.gw.t7d.io
+spec:
+  conversion:
+    strategy: None
+  group: gw.t7d.io
+  names:
+    kind: SnapshotApi
+    listKind: SnapshotApiList
+    plural: snapshotapis
+    shortNames:
+      - sapi
+    singular: snapshotapi
+  scope: Namespaced
+  versions:
+    - additionalPrinterColumns:
+        - jsonPath: .spec.path
+          name: path
+          type: string
+        - jsonPath: .spec.pattern
+          name: pattern
+          type: string
+        - jsonPath: .spec.method
+          name: method
+          type: string
+        - description: Age
+          jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v1
+      schema:
+        openAPIV3Schema:
+          description: SnapshotApi is a specification for a SnapshotApi resource
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              properties:
+                apiDoc:
+                  type: string
+                dubbo:
+                  properties:
+                    interfaceName:
+                      type: string
+                    methodName:
+                      type: string
+                  type: object
+                method:
+                  items:
+                    type: string
+                  type: array
+                path:
+                  type: string
+                pattern:
+                  type: string
+                protocol:
+                  items:
+                    type: string
+                  type: array
+                stripPath:
+                  type: boolean
+                grpcService:
+                  type: string
+                grpcMethod:
+                  type: string
+                grpcContent:
+                  type: string
+                matchingRules:
+                  type: string
+                tranformerInfo:
+                  properties:
+                    backendHttpMethod:
+                      type: string
+                    backendParamDto:
+                      items:
+                        properties:
+                          backendKey:
+                            type: string
+                          backendPosition:
+                            type: string
+                          backendValue:
+                            type: string
+                          defaultValue:
+                            type: string
+                          describe:
+                            type: string
+                          isRequired:
+                            type: boolean
+                          requestDataType:
+                            type: string
+                          requestKey:
+                            type: string
+                          requestPosition:
+                            type: string
+                        type: object
+                      type: array
+                    backendUri:
+                      type: string
+                    constantParamDto:
+                      items:
+                        properties:
+                          backendKey:
+                            type: string
+                          backendPosition:
+                            type: string
+                          backendValue:
+                            type: string
+                          defaultValue:
+                            type: string
+                          describe:
+                            type: string
+                          isRequired:
+                            type: boolean
+                          requestDataType:
+                            type: string
+                          requestKey:
+                            type: string
+                          requestPosition:
+                            type: string
+                        type: object
+                      type: array
+                    failedRespInfo:
+                      type: string
+                    filterType:
+                      type: integer
+                    requestContentType:
+                      type: string
+                    requestParamDto:
+                      items:
+                        properties:
+                          backendKey:
+                            type: string
+                          backendPosition:
+                            type: string
+                          backendValue:
+                            type: string
+                          defaultValue:
+                            type: string
+                          describe:
+                            type: string
+                          isRequired:
+                            type: boolean
+                          requestDataType:
+                            type: string
+                          requestKey:
+                            type: string
+                          requestPosition:
+                            type: string
+                        type: object
+                      type: array
+                    successRespInfo:
+                      type: string
+                  type: object
+              type: object
+            status:
+              properties:
+                publishInfo:
+                  items:
+                    properties:
+                      env:
+                        type: string
+                      ingress:
+                        type: string
+                      publishStatus:
+                        items:
+                          properties:
+                            domain:
+                              type: string
+                            memo:
+                              type: string
+                            publishName:
+                              type: string
+                            status:
+                              type: integer
+                            version:
+                              type: string
+                          type: object
+                        type: array
+                    type: object
+                  type: array
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: registrybridges.gw.t7d.io
+spec:
+  conversion:
+    strategy: None
+  group: gw.t7d.io
+  names:
+    kind: RegistryBridge
+    listKind: RegistryBridgeList
+    plural: registrybridges
+    shortNames:
+      - reb
+    singular: registrybridge
+  scope: Namespaced
+  versions:
+    - name: v1
+      schema:
+        openAPIV3Schema:
+          properties:
+            spec:
+              properties:
+                registries:
+                  items:
+                    properties:
+                      consulNamespace:
+                        type: string
+                      domain:
+                        type: string
+                      nacosAccessKey:
+                        type: string
+                      nacosAddressServer:
+                        type: string
+                      nacosGroups:
+                        items:
+                          type: string
+                        type: array
+                      nacosNamespace:
+                        type: string
+                      nacosNamespaceId:
+                        type: string
+                      nacosProper:
+                        items:
+                          properties:
+                            nacosGroup:
+                              type: string
+                            nacosNamespaceId:
+                              type: string
+                          type: object
+                        type: array
+                      nacosRefreshInterval:
+                        format: int64
+                        type: integer
+                      nacosSecretKey:
+                        type: string
+                      name:
+                        type: string
+                      password:
+                        type: string
+                      port:
+                        type: integer
+                      type:
+                        type: string
+                      userName:
+                        type: string
+                      zkServicesPath:
+                        items:
+                          type: string
+                        type: array
+                    type: object
+                  type: array
+              type: object
+            status:
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}

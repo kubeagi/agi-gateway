@@ -1,0 +1,28 @@
+apiVersion: gw.t7d.io/v1
+kind: SnapshotApi
+metadata:
+  annotations:
+    description: demoapi # Description of API
+    group/displayname: demo # Displayname of apigroup
+    match: prefixMatch # API routing matching rules, prefix matching prefixMatch is used here
+    tamp/clusterId: host-cluster # cluster id
+    tamp/displayName: demoapi # Displayname of API
+  labels:
+    tamp/group: apigroups-crwfdp # API associated apigroup CR name
+  name: snapshotapi-n85v0p1p # snapshotapi name
+  namespace: demo # snapshotapi namespace
+spec:
+  matchingRules: prefixMatch # API routing matching rules, prefix matching prefixMatch is used here
+  method: # API Routing Request Method
+    - GET
+    - POST
+    - PUT
+    - DELETE
+    - PATCH
+    - HEAD
+    - OPTIONS
+  path: /demoapi  # API routing prefix
+  pattern: proxy
+  protocol:
+    - http
+  stripPath: true # Does API routing forward remove prefix

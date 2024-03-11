@@ -1,0 +1,23 @@
+apiVersion: gw.t7d.io/v1
+kind: ApiGroup
+metadata:
+  annotations:
+    ingress_service: aiservicedemo # SVC name of k8s service
+    tamp/ai-supplier: ali #The type of service is defined in the configmap in the environment
+    tamp/displayName: demo #Display name for group
+  name: apigroups-crwfdp # apigroup name
+  namespace: demo # apigroup namespace
+spec:
+  apiType: regist  #The type of grouping is fixed to register
+  loadBalance:
+    balancingAlgorithms: round-robin #The load type for grouping is fixed as round robin
+  protocol: HTTP # apigroup Protocol
+  proxyType: proxy #The proxy type for grouped services is single service proxy
+  retries: 0
+  target:
+    - host: aiservicedemo #The SVC name of the grouped k8s service, if type is domain, here is the domain name
+      name: aiservicedemo  #SVC name of k8s service
+      port: 8080  #Port of SVC for grouped k8s services
+      primary: 0
+      type: k8s # The types of grouping services k8s (local large model service) and domain (external large model service)
+  timeout: 60000

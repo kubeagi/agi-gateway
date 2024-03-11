@@ -1,0 +1,26 @@
+apiVersion: gw.t7d.io/v1
+kind: Authorize
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: kong # ingress name
+    tamp/clusterId: host-cluster # The cluster ID where the application is located
+    tamp/consumerdisnanme: demo09 # Authorized application name
+    tamp/groupdisname: test # Displayname of apigroup
+    tamp/publishapidisname: demoapi # Displayname of api
+  labels:
+    tamp/snapshot: snapshotapi-n85v0p1p  # associated snapshotapi CR name
+    tamp/apins: demo # associated snapshotapi CR ns
+    tamp/bindingStatus: binding # Binding status: binding, unbinding: unbinding
+    tamp/consumernanme: consumer-wsctjttz # The CR name of the associated consumer
+    tamp/consumerns: demo # The namespace where the associated consumer is located
+    tamp/env: kong # The CR name of the gateway environment
+    tamp/groupname: apigroups-crwfdp # The CR name of the associated apigroup
+    tamp/publishapiname: snapshotapi-pqmwaf0p-znq1k0hh # The CR name of the associated publishapis
+  name: snapshotapi-n85v0p1p-consumer-wsctjttz-kong-87v2qo4b # name
+  namespace: demo # namespace
+spec:
+  apiName: snapshotapi-n85v0p1p #  associated snapshotapi CR name
+  bindingStatus: binding # Binding status: binding, unbinding: unbinding
+  bindingType: allow # Authorization status, fixed allow here
+  conName: consumer-wsctjttz # The CR name of the associated consumer
+  env: kong # The CR name of the gateway environment

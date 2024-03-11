@@ -1,0 +1,18 @@
+apiVersion: gw.t7d.io/v1
+kind: PluginRel
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: kong  # ingress name
+    tamp/pluginDisplayName: testtoken # The display name of the plugin
+  labels:
+    tamp/env: kong # The CR name of the gateway environment
+    tamp/snapshot: snapshotapi-n85v0p1p # associated snapshotapi CR name
+    tamp/plugin: token-limiting  # Binding plugin type
+    tamp/pluginname: plugin-token-limiting-imrp2perhv  # The name of the bound plugin CR
+    tamp/pluginshow: "true"  # Is the plugin displayed Fixed true here
+  name: pluginrel-tsywf8lw # name
+  namespace: demo # namespace
+spec:
+  apiName: snapshotapi-n85v0p1p # associated snapshotapi CR name
+  env: kong # The CR name of the gateway environment
+  pluginName: plugin-token-limiting-imrp2perhv # The name of the bound plugin CR

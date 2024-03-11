@@ -1,0 +1,36 @@
+apiVersion: gw.t7d.io/v1
+kind: PublishApi
+metadata:
+  annotations:
+    description: demoapi # Description of API
+    group/displayname: demo # Displayname of apigroup
+    kubernetes.io/ingress.class: kong # ingress name
+    marketName: kong  # Gateway environment name
+    tamp/clusterId: host-cluster # cluster id
+    tamp/displayName: demoapi # Description of API
+    tamp/envDisplayName: globalmarket  # Displayname of gateway environment
+    tamp/ingress: kong  #  ingress name
+    tamp/memo: "1"  # Fixed "1" for posting comments
+    updateTime: "1709278213289" # update time
+  labels:
+    tamp/env: kong # Gateway environment name
+    tamp/group: apigroups-crwfdp # API associated apigroup CR name
+    tamp/snapshot: snapshotapi-n85v0p1p # associated snapshotapi CR name
+    version: v2024.Jan.snapshotapi-n85v0p1p.1706521496765 # Version, customizable here
+  name: snapshotapi-n85v0p1p-11artedi # publishapi name
+  namespace: demo  # publishapi namespace
+spec:
+  matchingRules: prefixMatch #API routing matching rules, prefix matching prefixMatch is used here
+  method:
+    - GET
+    - POST
+    - PUT
+    - DELETE
+    - PATCH
+    - HEAD
+    - OPTIONS
+  path: /demoapi # API routing prefix
+  pattern: proxy
+  protocol:
+    - http
+  stripPath: true # Does API routing forward remove prefix

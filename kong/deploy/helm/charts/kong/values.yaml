@@ -1,0 +1,38 @@
+image:
+  registry: 192.168.90.228 # image warehouse address
+  kongproxy:
+    repository: system_containers/kong # repository
+    tag: gotest173
+  ingressController:
+    repository: system_containers/kong-ingress-controller
+  postgres:
+    repository: system_containers/postgres
+    tag: 9.5
+  pullPolicy: Always
+name: kong
+clusterId: host-cluster
+ingressClass: kong
+lblocation: http://kong-proxy.kong-system.svc.cluster.local:80
+openTapm: false
+tenantId: system-tenant
+traceUrl: ""
+logUrl: https://logging.192.168.90.178.nip.io
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kong180
+              operator: In
+              values:
+                - 180
+labels:
+  tampSystem: true
+
+resources:
+  limits:
+      cpu: 2
+      memory: 2Gi
+  requests:
+      cpu: 100m
+      memory: 200Mi
