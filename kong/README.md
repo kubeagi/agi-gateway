@@ -27,28 +27,25 @@ EOF
 ```
 kubectl create cm tamp-anywhere-helm-values --from-file=values-minio.yaml=gateway-api/values-minio.yaml --from-file=values.yaml=gateway-api/values.yaml -n kubebb-system
 ```
-### Install mini (skip this step if you already have minio)
-
-- Modify the values in componentplan minio.yaml according to the actual situation, as follows:
+###  Query minio information for API documentation of gateway components
 ```
-  override:
-    set:
-      - global.namespace=tamp-system # Use default values
-      - global.minio.image.registry=172.22.96.19 # harbor address
-      - global.minio.image.repository=system_containers/minio # Use default values
-      - global.minio.image.tag=latest # version
+kubectl get pod -nkubeagi-system
 ```
-Node labeling operation：tamp-app: minio
-``` 
-kubectl label nodes nodeName tamp-app=minio
+If there is a record of this pod running in the results, it can be used,for example:
 ```
-Create componentplan-minio
+arcadia-minio-7469c6dcfb-nb6q4                                    1/1     Running     1             48d
 ```
-kubectl apply -f componentplan-minio.yaml
+View minio's SVC
 ```
-- After deploying the minio, assign the access address of the minio to the parameter value global.minio.endpoint in componentplan. yaml in the root directory（ http://clusterIp:port (9000)
-- Customize the parameters global.minio.key and global.minio.secret values (as deployed above, the default values for key and secret are minioadmin)
-### The above only provides deployment examples for minio, and self maintained minio instances can be used in the future
+kubectl get svc -nkubeagi-system
+```
+Then we need to check his username and password
+```
+kubectl get secret -nkubeagi-system  arcadia-minio  -oyaml
+```
+View the following two values as username and password,The later configuration will use
+- rootPassword
+- rootUser
 
 
 ### Install gateway-management and tamp-portal
@@ -56,9 +53,9 @@ kubectl apply -f componentplan-minio.yaml
 ```
   override:
     set:
-      - global.minio.key=minioadmin # minio key
-      - global.minio.secret=minioadmin # minio secret
-      - global.minio.endpoint=http://10.99.154.248:9000 # minio address
+      - global.minio.key=admin # minio的key
+      - global.minio.secret=Passw0rd! # minio的secret
+      - global.minio.endpoint=http://10.104.49.50:9000 # minio地址
       - global.namespace=tamp-system # Use default values
       - tamp-portal.image.registry=172.22.96.19 # harbor address
       - tamp-portal.image.tag=v5.6.0 # tamp-portal image version
