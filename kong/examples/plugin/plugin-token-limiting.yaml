@@ -1,0 +1,21 @@
+apiVersion: gw.t7d.io/v1
+config:
+  limit_by: consumer  # The object targeted by the current limit is fixed as consumer here
+  policy: redis # The type of policy used for traffic restriction, fixed here as Redis
+  redis_host: kong-redis # The host address of Redis for current limiting
+  redis_password: kong # Restricted Redis password
+  redis_port: 6379 # Current limiting connection Redis port
+  total: 3 # current limiting period, total: total number,
+disabled: false # Fixed to false when enabling plugins
+kind: Plugin
+metadata:
+  annotations:
+    description: token-limiting-demo # Description of the plugin
+    tamp/displayName: token-limiting-demo # The display name of the plugin
+  labels:
+    tamp/plugin: token-limiting # plugin type token-limiting
+    tamp/plugincategory: traffic_control  # Plugin category, fixed traffic_control
+    tamp/pluginshow: "true"  # Is the plugin displayed Fixed true here
+  name: plugin-token-limiting-imrp2perhv # name
+  namespace: demo # namespace
+plugin: token-limiting # plugin type token-limiting

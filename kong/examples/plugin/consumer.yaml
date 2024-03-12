@@ -1,0 +1,11 @@
+apiVersion: gw.t7d.io/v1
+kind: Consumer
+metadata:
+  annotations:
+    tamp/clusterId: host-cluster # cluster Id
+    tamp/displayName: demo09 # Consumer DisplayName
+  name: consumer-wsctjttz # name
+  namespace: demo # namespace
+spec:
+  conName: demo09 # The name of the application
+  description: demo09 # Description of the application

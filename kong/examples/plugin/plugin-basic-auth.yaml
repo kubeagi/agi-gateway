@@ -1,0 +1,14 @@
+apiVersion: gw.t7d.io/v1
+disabled: false
+kind: Plugin
+metadata:
+  annotations:
+    description: default policy for cluster # Description of the plugin
+    tamp/displayName: basic-auth-default  # The display name of the plugin
+  labels:
+    tamp/plugin: basic-auth # plugin type basic-auth
+    tamp/plugincategory: authentication # Plugin category, fixed authentication
+    tamp/pluginshow: "true"  # Is the plugin displayed Fixed true here
+  name: basic-auth-default # name
+  namespace: demo  # namespace
+plugin: basic-auth # plugin type basic-auth

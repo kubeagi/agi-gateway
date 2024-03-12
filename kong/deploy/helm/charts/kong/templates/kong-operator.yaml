@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kong-operator
+  namespace:  {{ .Release.Namespace }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kong-operator
+  namespace:  {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: kong-operator
+  template:
+    metadata:
+      labels:
+        name: kong-operator
+    spec:
+      serviceAccountName: kong-operator
+      containers:
+        - name: kong-operator
+          # Replace this with the built image name
+          image: "{{ .Values.image.registry }}/system_containers/kong-operator:v0.9.0-tamp"
+          imagePullPolicy: Always
+          env:
+            - name: WATCH_NAMESPACE
+              value:  {{ .Release.Namespace }}
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "kong-operator"

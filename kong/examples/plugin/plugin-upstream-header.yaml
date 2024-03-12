@@ -1,0 +1,18 @@
+apiVersion: gw.t7d.io/v1
+config:
+  upstream_headers:
+    - header_key: Authorization # Fixed header parameter key
+      header_value: MTIzNA== # The header parameter value is the base64 ciphertext of the password for the AI service
+disabled: false # Fixed to false when enabling plugins
+kind: Plugin
+metadata:
+  annotations:
+    description: upstream-header-demo   # Description of the plugin
+    tamp/displayName: upstream-header-demo  # The display name of the plugin
+  labels:
+    tamp/plugin: upstream-header # plugin type upstream-header
+    tamp/plugincategory: security # Plugin category, fixed security
+    tamp/pluginshow: "true"  # Is the plugin displayed Fixed true here
+  name: plugin-upstream-header-u443fakr0b # name
+  namespace: demo  # namespace
+plugin: upstream-header #  plugin type upstream-header

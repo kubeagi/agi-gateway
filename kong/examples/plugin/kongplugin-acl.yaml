@@ -1,0 +1,14 @@
+apiVersion: configuration.konghq.com/v1
+config:
+  allow:
+    - demo09 # Application names of allowed consumers
+    - default
+  hide_groups_header: true
+disabled: false
+kind: KongPlugin
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: kong # ingress name
+  name: acl-kong-snapshotapi-voyrpnza  # name
+  namespace: demo # namespace
+plugin: acl # The plugin type is ACL

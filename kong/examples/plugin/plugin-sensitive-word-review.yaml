@@ -1,0 +1,16 @@
+apiVersion: gw.t7d.io/v1
+config:
+  addSensitiveWords: 妈的,一夜情,暴奸,卖身,迷魂香 # Definition of illegal words separated by commas in English
+disabled: false # Fixed to false when enabling plugins
+kind: Plugin
+metadata:
+  annotations:
+    description: default policy for cluster  # Description of the plugin
+    tamp/displayName: sensitive-word-review-default # The display name of the plugin
+  labels:
+    tamp/plugin: sensitive-word-review  #  plugin type sensitive-word-review
+    tamp/plugincategory: security # Plugin category, fixed security
+    tamp/pluginshow: "true"  # Is the plugin displayed Fixed true here
+  name: sensitive-word-review-default # name
+  namespace: demo  # namespace
+plugin: sensitive-word-review # plugin type sensitive-word-review
